@@ -1,69 +1,454 @@
-/* 奥佛寺 v6.3 - 优化版样式文件 */
+/* 奥佛寺 v6.3 - 完整样式文件 */
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap');
+
+/* CSS变量定义 - 便于主题管理 */
 :root {
-    --bg-color: #f7f4ed; --primary-text: #3a2e28; --accent-color: #c89f58;
-    --wood-color: #6d4c41; --red-seal: #a42626; --heat-hot: #e74c3c;
-    --heat-warm: #f39c12; --heat-cool: #27ae60; --success-green: #2ecc71;
-    --gold: #ffd700; --silver: #c0c0c0; --bronze: #cd7f32;
+    --bg-color: #f7f4ed; 
+    --primary-text: #3a2e28; 
+    --accent-color: #c89f58;
+    --wood-color: #6d4c41; 
+    --red-seal: #a42626; 
+    --heat-hot: #e74c3c;
+    --heat-warm: #f39c12; 
+    --heat-cool: #27ae60; 
+    --success-green: #2ecc71;
+    --gold: #ffd700; 
+    --silver: #c0c0c0; 
+    --bronze: #cd7f32;
 }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: var(--bg-color); color: var(--primary-text); margin: 0; padding: 20px; }
-.container { max-width: 1200px; margin: 20px auto; padding: 20px; background: rgba(255, 255, 255, 0.8); border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
-h1, h2 { font-family: 'Noto Serif SC', serif; text-align: center; color: var(--wood-color); font-weight: 700; border-bottom: 2px solid var(--accent-color); padding-bottom: 10px; margin-bottom: 30px;}
-h1 { font-size: 2.5em; border-bottom: none; }
-.subtitle { text-align: center; color: var(--accent-color); margin-top: -30px; margin-bottom: 40px; font-style: italic; }
-.form-section { background: #fdfaf2; padding: 25px; border-radius: 8px; border: 1px dashed var(--accent-color); margin-bottom: 40px; position: relative; }
-.form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
-.form-group { display: flex; flex-direction: column; }
-.form-group label { margin-bottom: 5px; font-weight: bold; font-family: 'Noto Serif SC', serif; }
-.form-group input, .form-group select { padding: 10px; border-radius: 5px; border: 1px solid #ddd8cc; background: #fff; font-size: 1em; }
-.muyu-submit-container { grid-column: 1 / -1; display: flex; flex-direction: column; justify-content: center; align-items: center; margin-top: 20px; position: relative;}
-.muyu-submit-button { border: none; background: transparent; padding: 0; cursor: pointer; position: relative; width: 280px; height: 100px; transition: transform 0.2s ease-out; }
-.muyu-submit-button:active { transform: scale(0.9); }
-.muyu-body { width: 220px; height: 90px; background: var(--wood-color); border-radius: 50%; position: absolute; top: 5px; left: 25px; box-shadow: inset 0 -10px 15px rgba(0,0,0,0.2), 0 5px 15px rgba(0,0,0,0.3); display: flex; justify-content: center; align-items: center; }
-.muyu-body::before { content: ''; position: absolute; left: -12px; top: 35px; width: 24px; height: 24px; background: var(--bg-color); border: 6px solid var(--wood-color); border-radius: 50%;}
-.muyu-body::after { content: ''; position: absolute; left: 15px; top: 30px; width: 12px; height: 12px; background: #fff; border: 2px solid #000; border-radius: 50%;}
-.muyu-tail { width: 80px; height: 80px; background: var(--wood-color); position: absolute; right: 0px; top: 10px; border-radius: 0 50% 50% 0; transform: rotate(45deg); box-shadow: inset -5px 5px 10px rgba(0,0,0,0.2); }
-.muyu-text { color: white; font-family: 'Noto Serif SC', serif; font-size: 1.2em; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); position: relative; z-index: 1; }
-#merit-counter-display { font-size: 1.1em; font-weight: bold; color: var(--accent-color); margin-bottom: 10px; }
-/* 优化后的动画 - 更快更流畅 */
-.merit-plus-one { position: absolute; bottom: 100%; left: 50%; font-size: 1.8em; font-weight: bold; color: var(--accent-color); animation: float-up-center 0.6s ease-out forwards; pointer-events: none; }
-@keyframes float-up-center { from { opacity: 1; transform: translate(-50%, 0) scale(1); } to { opacity: 0; transform: translate(-50%, -40px) scale(1.2); } }
-.bottom-panels { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
-@media (max-width: 900px) { .bottom-panels { grid-template-columns: 1fr; } }
-.filter-container { margin-bottom: 20px; text-align: center; }
-.filter-btn { background: #fff; border: 1px solid #ddd8cc; padding: 8px 15px; margin: 0 5px; border-radius: 20px; cursor: pointer; font-family: 'Noto Serif SC', serif; }
-.filter-btn.active { background: var(--wood-color); color: white; }
-.heat-dashboard { display: grid; grid-template-columns: 1fr; gap: 15px; }
-.heat-item { background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-left: 5px solid; }
-.heat-item.hot { border-left-color: var(--heat-hot); } .heat-item.warm { border-left-color: var(--heat-warm); } .heat-item.cool { border-left-color: var(--heat-cool); }
-.heat-item-header { display: flex; align-items: center; margin-bottom: 10px; }
-.heat-item-header-icon { font-size: 1.5em; margin-right: 10px; }
-.heat-item-header h3 { margin: 0; font-family: 'Noto Serif SC', serif; font-size: 1.1em; }
-.heat-bar-container { display: flex; align-items: center; }
-.heat-bar { width: 100%; height: 12px; background-color: #e0e0e0; border-radius: 6px; overflow: hidden; margin-right: 8px; }
-.heat-level { height: 100%; }
-.heat-level.hot { background: var(--heat-hot); } .heat-level.warm { background: var(--heat-warm); } .heat-level.cool { background: var(--heat-cool); }
-.heat-text { font-size: 0.9em; font-weight: bold; white-space: nowrap; }
-.table-container { overflow-x: auto; }
-table { width: 100%; border-collapse: collapse; }
-th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #ddd8cc; }
-th { background-color: #fdfaf2; }
-.status { padding: 5px 10px; border-radius: 15px; font-size: 0.8em; font-weight: bold; color: white; text-align: center; }
-.status-offer { background-color: var(--heat-cool); } .status-interview { background-color: #2980b9; } .status-rejection { background-color: #7f8c8d; }
-.fortune-cell { font-weight: bold; color: var(--red-seal); text-align: center; }
-.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 2000; }
-.modal-content { background: white; padding: 30px; border-radius: 10px; text-align: center; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-.close-button { background: var(--accent-color); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-family: 'Noto Serif SC', serif; margin-top: 15px; }
-.modal-merit { margin: 15px 0; font-size: 1.1em; }
+
+/* 基础样式 */
+body { 
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+    background-color: var(--bg-color); 
+    color: var(--primary-text); 
+    margin: 0; 
+    padding: 20px; 
+}
+
+.container { 
+    max-width: 1200px; 
+    margin: 20px auto; 
+    padding: 20px; 
+    background: rgba(255, 255, 255, 0.8); 
+    border-radius: 10px; 
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05); 
+}
+
+/* 标题样式 */
+h1, h2 { 
+    font-family: 'Noto Serif SC', serif; 
+    text-align: center; 
+    color: var(--wood-color); 
+    font-weight: 700; 
+    border-bottom: 2px solid var(--accent-color); 
+    padding-bottom: 10px; 
+    margin-bottom: 30px;
+}
+
+h1 { 
+    font-size: 2.5em; 
+    border-bottom: none; 
+}
+
+.subtitle { 
+    text-align: center; 
+    color: var(--accent-color); 
+    margin-top: -30px; 
+    margin-bottom: 40px; 
+    font-style: italic; 
+}
+
+/* 表单样式 */
+.form-section { 
+    background: #fdfaf2; 
+    padding: 25px; 
+    border-radius: 8px; 
+    border: 1px dashed var(--accent-color); 
+    margin-bottom: 40px; 
+    position: relative; 
+}
+
+.form-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+    gap: 20px; 
+}
+
+.form-group { 
+    display: flex; 
+    flex-direction: column; 
+}
+
+.form-group label { 
+    margin-bottom: 5px; 
+    font-weight: bold; 
+    font-family: 'Noto Serif SC', serif; 
+}
+
+.form-group input, .form-group select { 
+    padding: 10px; 
+    border-radius: 5px; 
+    border: 1px solid #ddd8cc; 
+    background: #fff; 
+    font-size: 1em; 
+}
+
+/* 木鱼按钮样式 */
+.muyu-submit-container { 
+    grid-column: 1 / -1; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center; 
+    margin-top: 20px; 
+    position: relative;
+}
+
+.muyu-submit-button { 
+    border: none; 
+    background: transparent; 
+    padding: 0; 
+    cursor: pointer; 
+    position: relative; 
+    width: 280px; 
+    height: 100px; 
+    transition: transform 0.2s ease-out; 
+}
+
+.muyu-submit-button:active { 
+    transform: scale(0.9); 
+}
+
+.muyu-submit-button:disabled { 
+    opacity: 0.6; 
+    cursor: not-allowed; 
+}
+
+.muyu-body { 
+    width: 220px; 
+    height: 90px; 
+    background: var(--wood-color); 
+    border-radius: 50%; 
+    position: absolute; 
+    top: 5px; 
+    left: 25px; 
+    box-shadow: inset 0 -10px 15px rgba(0,0,0,0.2), 0 5px 15px rgba(0,0,0,0.3); 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+}
+
+.muyu-body::before { 
+    content: ''; 
+    position: absolute; 
+    left: -12px; 
+    top: 35px; 
+    width: 24px; 
+    height: 24px; 
+    background: var(--bg-color); 
+    border: 6px solid var(--wood-color); 
+    border-radius: 50%;
+}
+
+.muyu-body::after { 
+    content: ''; 
+    position: absolute; 
+    left: 15px; 
+    top: 30px; 
+    width: 12px; 
+    height: 12px; 
+    background: #fff; 
+    border: 2px solid #000; 
+    border-radius: 50%;
+}
+
+.muyu-tail { 
+    width: 80px; 
+    height: 80px; 
+    background: var(--wood-color); 
+    position: absolute; 
+    right: 0px; 
+    top: 10px; 
+    border-radius: 0 50% 50% 0; 
+    transform: rotate(45deg); 
+    box-shadow: inset -5px 5px 10px rgba(0,0,0,0.2); 
+}
+
+.muyu-text { 
+    color: white; 
+    font-family: 'Noto Serif SC', serif; 
+    font-size: 1.2em; 
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5); 
+    position: relative; 
+    z-index: 1; 
+}
+
+#merit-counter-display { 
+    font-size: 1.1em; 
+    font-weight: bold; 
+    color: var(--accent-color); 
+    margin-bottom: 10px; 
+}
+
+/* 布局样式 */
+.bottom-panels { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    gap: 30px; 
+}
+
+@media (max-width: 900px) { 
+    .bottom-panels { 
+        grid-template-columns: 1fr; 
+    } 
+}
+
+/* 筛选按钮样式 */
+.filter-container { 
+    margin-bottom: 20px; 
+    text-align: center; 
+}
+
+.filter-btn { 
+    background: #fff; 
+    border: 1px solid #ddd8cc; 
+    padding: 8px 15px; 
+    margin: 0 5px; 
+    border-radius: 20px; 
+    cursor: pointer; 
+    font-family: 'Noto Serif SC', serif; 
+}
+
+.filter-btn.active { 
+    background: var(--wood-color); 
+    color: white; 
+}
+
+/* 热度面板样式 */
+.heat-dashboard { 
+    display: grid; 
+    grid-template-columns: 1fr; 
+    gap: 15px; 
+}
+
+.heat-item { 
+    background: #fff; 
+    padding: 15px; 
+    border-radius: 8px; 
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
+    border-left: 5px solid; 
+}
+
+.heat-item.hot { 
+    border-left-color: var(--heat-hot); 
+} 
+
+.heat-item.warm { 
+    border-left-color: var(--heat-warm); 
+} 
+
+.heat-item.cool { 
+    border-left-color: var(--heat-cool); 
+}
+
+.heat-item-header { 
+    display: flex; 
+    align-items: center; 
+    margin-bottom: 10px; 
+}
+
+.heat-item-header-icon { 
+    font-size: 1.5em; 
+    margin-right: 10px; 
+}
+
+.heat-item-header h3 { 
+    margin: 0; 
+    font-family: 'Noto Serif SC', serif; 
+    font-size: 1.1em; 
+}
+
+.heat-bar-container { 
+    display: flex; 
+    align-items: center; 
+}
+
+.heat-bar { 
+    width: 100%; 
+    height: 12px; 
+    background-color: #e0e0e0; 
+    border-radius: 6px; 
+    overflow: hidden; 
+    margin-right: 8px; 
+}
+
+.heat-level { 
+    height: 100%; 
+}
+
+.heat-level.hot { 
+    background: var(--heat-hot); 
+} 
+
+.heat-level.warm { 
+    background: var(--heat-warm); 
+} 
+
+.heat-level.cool { 
+    background: var(--heat-cool); 
+}
+
+.heat-text { 
+    font-size: 0.9em; 
+    font-weight: bold; 
+    white-space: nowrap; 
+}
+
+/* 表格样式 */
+.table-container { 
+    overflow-x: auto; 
+}
+
+table { 
+    width: 100%; 
+    border-collapse: collapse; 
+}
+
+th, td { 
+    padding: 12px 15px; 
+    text-align: left; 
+    border-bottom: 1px solid #ddd8cc; 
+}
+
+th { 
+    background-color: #fdfaf2; 
+}
+
+.status { 
+    padding: 5px 10px; 
+    border-radius: 15px; 
+    font-size: 0.8em; 
+    font-weight: bold; 
+    color: white; 
+    text-align: center; 
+}
+
+.status-offer { 
+    background-color: var(--heat-cool); 
+} 
+
+.status-interview { 
+    background-color: #2980b9; 
+} 
+
+.status-rejection { 
+    background-color: #7f8c8d; 
+}
+
+.fortune-cell { 
+    font-weight: bold; 
+    color: var(--red-seal); 
+    text-align: center; 
+}
+
+/* 模态框样式 */
+.modal-overlay { 
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background: rgba(0,0,0,0.6); 
+    display: none; 
+    justify-content: center; 
+    align-items: center; 
+    z-index: 2000; 
+}
+
+.modal-content { 
+    background: white; 
+    padding: 30px; 
+    border-radius: 10px; 
+    text-align: center; 
+    max-width: 400px; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
+}
+
+.close-button { 
+    background: var(--accent-color); 
+    color: white; 
+    border: none; 
+    padding: 10px 20px; 
+    border-radius: 5px; 
+    cursor: pointer; 
+    font-family: 'Noto Serif SC', serif; 
+    margin-top: 15px; 
+}
+
+.modal-merit { 
+    margin: 15px 0; 
+    font-size: 1.1em; 
+}
+
 /* 功德排行榜样式 */
-.leaderboard-section { background: #fff; padding: 15px; border-radius: 8px; margin-bottom: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-.leaderboard-list { list-style: none; padding: 0; margin: 0; }
-.leaderboard-item { display: flex; align-items: center; padding: 10px 5px; border-bottom: 1px solid #f0f0f0; }
-.leaderboard-item:last-child { border-bottom: none; }
-.leaderboard-rank { font-size: 1.2em; font-weight: bold; width: 40px; text-align: center; }
-.leaderboard-name { flex-grow: 1; font-family: 'Noto Serif SC', serif; }
-.leaderboard-merit { font-weight: bold; color: var(--accent-color); }
-.leaderboard-item.rank-1 .leaderboard-rank { color: var(--gold); }
-.leaderboard-item.rank-2 .leaderboard-rank { color: var(--silver); }
-.leaderboard-item.rank-3 .leaderboard-rank { color: var(--bronze); }
-.leaderboard-item#user-rank-item { background-color: #fffbe0; border-left: 3px solid var(--accent-color); margin: 5px -15px; padding-left: 12px; }
+.leaderboard-section { 
+    background: #fff; 
+    padding: 15px; 
+    border-radius: 8px; 
+    margin-bottom: 30px; 
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05); 
+}
+
+.leaderboard-list { 
+    list-style: none; 
+    padding: 0; 
+    margin: 0; 
+}
+
+.leaderboard-item { 
+    display: flex; 
+    align-items: center; 
+    padding: 10px 5px; 
+    border-bottom: 1px solid #f0f0f0; 
+}
+
+.leaderboard-item:last-child { 
+    border-bottom: none; 
+}
+
+.leaderboard-rank { 
+    font-size: 1.2em; 
+    font-weight: bold; 
+    width: 40px; 
+    text-align: center; 
+}
+
+.leaderboard-name { 
+    flex-grow: 1; 
+    font-family: 'Noto Serif SC', serif; 
+}
+
+.leaderboard-merit { 
+    font-weight: bold; 
+    color: var(--accent-color); 
+}
+
+.leaderboard-item.rank-1 .leaderboard-rank { 
+    color: var(--gold); 
+}
+
+.leaderboard-item.rank-2 .leaderboard-rank { 
+    color: var(--silver); 
+}
+
+.leaderboard-item.rank-3 .leaderboard-rank { 
+    color: var(--bronze); 
+}
+
+.leaderboard-item#user-rank-item { 
+    background-color: #fffbe0; 
+    border-left: 3px solid var(--accent-color); 
+    margin: 5px -15px; 
+    padding-left: 12px; 
+}

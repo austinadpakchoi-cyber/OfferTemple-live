@@ -1,6 +1,13 @@
-// 奥佛寺 v6.3 - 优化版JavaScript文件
+// 奥佛寺 v6.3 - 完整功能版本
 document.addEventListener('DOMContentLoaded', () => {
-    // --- 数据区 ---
+    // --- 1. 初始化 Supabase ---
+    const SUPABASE_URL = 'https://uwgskpwjjtncktqoxirx.supabase.co' // 替换成您自己的 URL
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV3Z3NrcHdqanRuY2t0cW94aXJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkwODg1MjUsImV4cCI6MjA3NDY2NDUyNX0.k0RD5rqr2f1oHnkGVji60M0DUmzfh18C8M89zR7h2xgEY' // 替换成您自己的 Key
+
+    const supabase = self.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+    console.log('Supabase 初始化成功!');
+
+    // --- 2. 全局变量和数据 ---
     const heatData = [
         {"program":"HKU - CS","heat":92,"category":"理工","icon":"💻"},
         {"program":"HKUST - BA","heat":85,"category":"商科","icon":"📈"},
@@ -11,11 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
         {"program":"CUHK - GP", "heat":45, "category":"人文社科", "icon":"🌍"}
     ];
     
-    const fortunes = [
-        "出门捡到钱","刮中大彩票","偶像回你私信","体重轻了5斤",
-        "喜欢的人向你表白","干饭不用排队","论文一稿就过",
-        "DDL自动延长","水逆即刻退散","抽卡一发入魂"
-    ];
+    const fortunes = ["出门捡到钱","刮中大彩票","偶像回你私信","体重轻了5斤","喜欢的人向你表白","干饭不用排队","论文一稿就过","DDL自动延长","水逆即刻退散","抽卡一发入魂"];
     
     // 功德排行榜数据
     let leaderboardData = [
@@ -27,84 +30,160 @@ document.addEventListener('DOMContentLoaded', () => {
         { name: "拜佛的咸鱼", merit: 12345 }
     ];
 
-    // --- 元素获取 ---
+    // 元素获取
     const form = document.getElementById('application-form');
     const programInput = document.getElementById('program');
     const muyuBtn = document.getElementById('muyu-submit-btn');
     const muyuText = document.getElementById('muyu-text');
-    const meritCounterDisplay = document.getElementById('merit-counter-display');
+    const tableBody = document.querySelector('#cases-table tbody');
     const knockSound = document.getElementById('knock-sound');
     const leaderboardList = document.getElementById('leaderboard-list');
     let merit = 0;
 
-    // --- 核心函数区 ---
-    muyuBtn.addEventListener('click', () => {
-        // 播放音效
-        try {
-            knockSound.currentTime = 0;
-            knockSound.play();
-        } catch(e) { 
-            console.log("Sound play failed."); 
-        }
+// --- 3. 核心功能函数 ---
 
-        if (programInput.value.trim() !== '') {
-            submitApplication();
-        } else {
-            addMerit();
-        }
-    });
+/**
+ * 从 Supabase 获取所有案例并渲染到表格
+ */
+async function fetchAndRenderCases() {
+    // 显示加载状态
+    tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center;">正在从云端读取善缘...</td></tr>';
     
-    programInput.addEventListener('input', () => {
-        if (programInput.value.trim() !== '') {
-            muyuText.textContent = '提交善缘';
-        } else {
-            muyuText.textContent = '敲此积福';
-        }
-    });
+    // 从 'cases' 表读取数据，按创建时间降序排列
+    const { data, error } = await supabase
+        .from('cases')
+        .select('*')
+        .order('created_at', { ascending: false });
 
-    function addMerit() {
-        merit++;
-        meritCounterDisplay.textContent = `当前功德: ${merit}`;
-        
-        // 直接更新排行榜中的功德，避免重新渲染整个列表
-        const userRankItem = document.getElementById('user-rank-merit');
-        if (userRankItem) {
-            userRankItem.textContent = merit;
-            // 更新数据中的功德值
-            const userData = leaderboardData.find(user => user.isUser);
-            if (userData) {
-                userData.merit = merit;
-            }
-        }
-
-        // 优化动画：减少动画时间，使用更轻量的实现
-        const plusOne = document.createElement('div');
-        plusOne.textContent = '功德+1';
-        plusOne.classList.add('merit-plus-one');
-        muyuBtn.parentNode.appendChild(plusOne);
-        // 使用setTimeout而不是animationend事件，更可靠
-        setTimeout(() => { 
-            if (plusOne.parentNode) {
-                plusOne.remove(); 
-            }
-        }, 600);
+    if (error) {
+        console.error('读取数据失败:', error);
+        tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center;">读取善缘失败，请刷新重试。</td></tr>';
+        return;
     }
 
-    function submitApplication() {
-        const school = form.elements.school.value;
-        const program = form.elements.program.value;
-        const status = form.elements.status.value;
-        const tableBody = document.querySelector('#cases-table tbody');
-        const newRow = tableBody.insertRow(0);
-        newRow.style.backgroundColor = '#fffbe0';
-        const randomFortune = fortunes[Math.floor(Math.random() * fortunes.length)];
-        newRow.innerHTML = `<td>${school}</td><td>${program}</td><td><span class="status status-${status.toLowerCase()}">${status}</span></td><td class="fortune-cell">✨ ${randomFortune} ✨</td>`;
+    // 清空表格，准备渲染新数据
+    tableBody.innerHTML = '';
+    if (data.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center;">功德簿暂无记录，等待第一位有缘人。</td></tr>';
+    } else {
+        data.forEach(caseItem => {
+            const newRow = tableBody.insertRow();
+            let statusClass = '';
+            if(caseItem.status === 'Offer') statusClass = 'status-offer';
+            else if(caseItem.status === 'Interview') statusClass = 'status-interview';
+            else statusClass = 'status-rejection';
+
+            newRow.innerHTML = `
+                <td>${caseItem.school}</td>
+                <td>${caseItem.program}</td>
+                <td><span class="status ${statusClass}">${caseItem.status}</span></td>
+                <td class="fortune-cell">✨ ${caseItem.fortune} ✨</td>
+            `;
+        });
+    }
+}
+
+/**
+ * 处理表单提交，将数据写入 Supabase
+ */
+async function submitApplication() {
+    const school = form.elements.school.value;
+    const program = form.elements.program.value;
+    const status = form.elements.status.value;
+    const randomFortune = fortunes[Math.floor(Math.random() * fortunes.length)];
+
+    // 禁用按钮，防止重复提交
+    muyuBtn.disabled = true;
+    muyuText.textContent = '上报中...';
+
+    // 向 'cases' 表插入新数据
+    const { error } = await supabase
+        .from('cases')
+        .insert([
+            { school, program, status, fortune: randomFortune }
+        ]);
+
+    if (error) {
+        console.error('写入数据失败:', error);
+        showFeedbackModal('Error', randomFortune);
+    } else {
+        console.log('写入成功!');
         showFeedbackModal(status, randomFortune);
-        form.reset();
-        muyuText.textContent = '敲此积福';
+        // 成功后，重新获取并渲染所有案例，实现实时更新
+        await fetchAndRenderCases();
     }
     
-    // 渲染排行榜函数
+    // 恢复按钮
+    form.reset();
+    muyuBtn.disabled = false;
+    muyuText.textContent = '敲此积福';
+}
+
+
+// --- 4. 事件监听 ---
+muyuBtn.addEventListener('click', () => {
+    // 现在木鱼按钮只负责提交
+    if (programInput.value.trim() !== '') {
+        submitApplication();
+    } else {
+        // 提示用户填写
+        alert('请先填写专业名称再提交善缘哦！');
+    }
+});
+
+// 弹窗逻辑 (略作修改以处理错误情况)
+function showFeedbackModal(status, fortune) {
+    const modal = document.getElementById('feedback-modal');
+    const feedbackMessages = {
+        'Offer': { title: "恭喜！前程似锦！", message: "您的善缘已结善果！" },
+        'Interview': { title: "吉兆！好运将至！", message: "面试是成功的序章！" },
+        'Rejection': { title: "莫愁！福报在后！", message: "塞翁失马，焉知非福！" },
+        'Error': { title: "发生错误", message: "提交失败，请检查网络或稍后再试。" }
+    };
+    const { title, message } = feedbackMessages[status] || feedbackMessages['Error'];
+    modal.innerHTML = `<div class="modal-content"><h3>${title}</h3><p>${message}</p>${status !== 'Error' ? `<div class="modal-merit">今日福报: <br><strong>${fortune}</strong></div>` : ''}<button class="close-button">朕知道了</button></div>`;
+    modal.style.display = 'flex';
+    modal.querySelector('.close-button').addEventListener('click', () => { modal.style.display = 'none'; });
+}
+
+    // --- 5. 热度面板功能 ---
+    function renderDashboard(filter = 'all') {
+        const dashboard = document.getElementById('heat-dashboard');
+        dashboard.innerHTML = '';
+        const filteredData = (filter === 'all') ? heatData : heatData.filter(d => d.category === filter);
+        filteredData.forEach(data => {
+            let colorClass = 'cool';
+            if (data.heat > 75) colorClass = 'hot';
+            else if (data.heat > 40) colorClass = 'warm';
+            
+            const item = document.createElement('div');
+            item.className = `heat-item ${colorClass}`;
+            item.innerHTML = `
+                <div class="heat-item-header">
+                    <span class="heat-item-header-icon">${data.icon}</span>
+                    <h3>${data.program}</h3>
+                </div>
+                <div class="heat-bar-container">
+                    <div class="heat-bar">
+                        <div class="heat-level ${colorClass}" style="width: ${data.heat}%"></div>
+                    </div>
+                    <span class="heat-text">${data.heat} 人已报</span>
+                </div>
+            `;
+            dashboard.appendChild(item);
+        });
+    }
+    
+    // 筛选按钮事件
+    document.getElementById('filter-container').addEventListener('click', (e) => {
+        if (e.target.tagName === 'BUTTON') {
+            document.querySelector('.filter-btn.active').classList.remove('active');
+            e.target.classList.add('active');
+            renderDashboard(e.target.dataset.filter);
+        }
+    });
+
+    // --- 6. 功德排行榜功能 ---
     function renderLeaderboard() {
         // 确保数据按功德降序排列
         leaderboardData.sort((a, b) => b.merit - a.merit);
@@ -135,67 +214,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function renderDashboard(filter = 'all') {
-        const dashboard = document.getElementById('heat-dashboard');
-        dashboard.innerHTML = '';
-        const filteredData = (filter === 'all') ? heatData : heatData.filter(d => d.category === filter);
-        filteredData.forEach(data => {
-            let colorClass = 'cool';
-            if (data.heat > 75) colorClass = 'hot';
-            else if (data.heat > 40) colorClass = 'warm';
-            
-            const item = document.createElement('div');
-            item.className = `heat-item ${colorClass}`;
-            item.innerHTML = `
-                <div class="heat-item-header">
-                    <span class="heat-item-header-icon">${data.icon}</span>
-                    <h3>${data.program}</h3>
-                </div>
-                <div class="heat-bar-container">
-                    <div class="heat-bar">
-                        <div class="heat-level ${colorClass}" style="width: ${data.heat}%"></div>
-                    </div>
-                    <span class="heat-text">${data.heat} 人已报</span>
-                </div>
-            `;
-            dashboard.appendChild(item);
-        });
-    }
-    
-    document.getElementById('filter-container').addEventListener('click', (e) => {
-        if (e.target.tagName === 'BUTTON') {
-            document.querySelector('.filter-btn.active').classList.remove('active');
-            e.target.classList.add('active');
-            renderDashboard(e.target.dataset.filter);
-        }
-    });
-    
-    function showFeedbackModal(status, fortune) {
-        const modal = document.getElementById('feedback-modal');
-        const feedbackMessages = {
-            'Offer': { title: "恭喜！前程似锦！", message: "您的善缘已结善果！" },
-            'Interview': { title: "吉兆！好运将至！", message: "面试是成功的序章！" },
-            'Rejection': { title: "莫愁！福报在后！", message: "塞翁失马，焉知非福！" }
-        };
-        
-        modal.innerHTML = `
-            <div class="modal-content">
-                <h3>${feedbackMessages[status].title}</h3>
-                <p>${feedbackMessages[status].message}</p>
-                <div class="modal-merit">今日福报: <br><strong>${fortune}</strong></div>
-                <button class="close-button">朕知道了</button>
-            </div>
-        `;
-        modal.style.display = 'flex';
-        modal.querySelector('.close-button').addEventListener('click', () => { 
-            modal.style.display = 'none'; 
-        });
-        modal.addEventListener('click', (e) => { 
-            if(e.target === modal) modal.style.display = 'none'; 
-        });
-    }
-    
-    // --- 初始化 ---
+    // --- 7. 页面初始化 ---
+    // 页面加载后，立即从云端获取数据
+    fetchAndRenderCases();
     renderDashboard();
-    renderLeaderboard(); // 初始化时渲染排行榜
+    renderLeaderboard();
 });
