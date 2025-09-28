@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>奥佛寺 v6.3 - 功德排行榜</title>
+    <link rel="stylesheet" href="tutorial-style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>奥佛寺</h1>
+        <p class="subtitle">汇愿力，知热度，得奥佛</p>
+        <section class="form-section">
+             <h2>诚心许愿 · 汇聚善缘</h2>
+            <form id="application-form">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="school">学校</label>
+                        <select id="school" name="school">
+                            <option value="香港大学">香港大学</option>
+                            <option value="香港中文大学">香港中文大学</option>
+                            <option value="香港科技大学">香港科技大学</option>
+                            <option value="香港城市大学">香港城市大学</option>
+                            <option value="香港理工大学">香港理工大学</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="program">专业 (填写后即可提交)</label>
+                        <input type="text" id="program" name="program" placeholder="例如: MSc Marketing">
+                    </div>
+                    <div class="form-group">
+                        <label for="status">当前状态</label>
+                        <select id="status" name="status">
+                            <option value="Offer">已录取 (Offer)</option>
+                            <option value="Interview">收到面试 (Interview)</option>
+                            <option value="Rejection">暂未通过</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="muyu-submit-container">
+                    <p id="merit-counter-display">当前功德: 0</p>
+                    <button type="button" id="muyu-submit-btn" class="muyu-submit-button">
+                        <div class="muyu-tail"></div>
+                        <div class="muyu-body"><span id="muyu-text" class="muyu-text">敲此积福</span></div>
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <div class="bottom-panels">
+            <section id="heat-panel">
+                <h2>热门专业风向标</h2>
+                <div class="filter-container" id="filter-container">
+                    <button class="filter-btn active" data-filter="all">总览</button>
+                    <button class="filter-btn" data-filter="商科">商科</button>
+                    <button class="filter-btn" data-filter="理工">理工</button>
+                    <button class="filter-btn" data-filter="人文社科">人文社科</button>
+                </div>
+                <div id="heat-dashboard" class="heat-dashboard"></div>
+            </section>
+            
+            <section id="cases-panel">
+                <div class="leaderboard-section">
+                    <h2>功德排行榜</h2>
+                    <ol class="leaderboard-list" id="leaderboard-list"></ol>
+                </div>
+                
+                <h2>众生功德簿</h2>
+                <div class="table-container">
+                    <table id="cases-table">
+                        <thead>
+                            <tr>
+                                <th>学校</th>
+                                <th>专业</th>
+                                <th>状态</th>
+                                <th style="text-align: center;">今日福报</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <div id="feedback-modal" class="modal-overlay"></div>
+    <audio id="knock-sound" src="9月29日.MP3" preload="auto"></audio>
+    
+    <script src="tutorial-script.js"></script>
+</body>
+</html>
