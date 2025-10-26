@@ -1,92 +1,387 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>奥佛寺 v6.3 - 功德排行榜</title>
+    <title>English Huangli – MVP Product Blueprint</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-    <div class="container">
-        <h1>奥佛寺</h1>
-        <p class="subtitle">汇愿力，知热度，得奥佛</p>
-        <section class="form-section">
-             <h2>诚心许愿 · 汇聚善缘</h2>
-            <form id="application-form">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label for="school">学校</label>
-                        <select id="school" name="school">
-                            <option value="香港大学">香港大学</option>
-                            <option value="香港中文大学">香港中文大学</option>
-                            <option value="香港科技大学">香港科技大学</option>
-                            <option value="香港城市大学">香港城市大学</option>
-                            <option value="香港理工大学">香港理工大学</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="program">专业 (填写后即可提交)</label>
-                        <input type="text" id="program" name="program" placeholder="例如: MSc Marketing">
-                    </div>
-                    <div class="form-group">
-                        <label for="status">当前状态</label>
-                        <select id="status" name="status">
-                            <option value="Offer">已录取 (Offer)</option>
-                            <option value="Interview">收到面试 (Interview)</option>
-                            <option value="Rejection">暂未通过</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="muyu-submit-container">
-                    <p id="merit-counter-display">当前功德: 0</p>
-                    <button type="button" id="muyu-submit-btn" class="muyu-submit-button">
-                        <div class="muyu-tail"></div>
-                        <div class="muyu-body"><span id="muyu-text" class="muyu-text">敲此积福</span></div>
-                    </button>
-                </div>
-            </form>
+    <header class="site-header">
+        <div class="hero">
+            <p class="eyebrow">Product Draft · v0.1</p>
+            <h1>A Modern English Huangli</h1>
+            <p class="lead">Daily DO/DON'T guidance, auspicious hours, and cultural storytelling designed for an international audience.</p>
+            <div class="hero-actions">
+                <a class="button primary" href="#phase-0">Jump to MVP Scope</a>
+                <a class="button secondary" href="#roadmap">View Roadmap</a>
+            </div>
+            <p class="disclaimer">For cultural &amp; entertainment purposes only. Not medical, financial, or legal advice.</p>
+        </div>
+        <button class="toc-toggle" aria-expanded="false" aria-controls="toc">Table of Contents</button>
+        <nav id="toc" class="table-of-contents" aria-label="Table of contents">
+            <ol>
+                <li><a href="#positioning">Product positioning &amp; goals</a></li>
+                <li><a href="#ia">Information architecture</a></li>
+                <li><a href="#mvp">MVP feature set</a></li>
+                <li><a href="#components">Page &amp; module inventory</a></li>
+                <li><a href="#data-model">Data model</a></li>
+                <li><a href="#api">Backend API sketch</a></li>
+                <li><a href="#stack">Tech stack &amp; infrastructure</a></li>
+                <li><a href="#copy">Content &amp; tone guidelines</a></li>
+                <li><a href="#growth">SEO &amp; growth</a></li>
+                <li><a href="#compliance">Compliance &amp; risk</a></li>
+                <li><a href="#roadmap">Phased roadmap</a></li>
+                <li><a href="#wireframes">Key page wireframes</a></li>
+                <li><a href="#roles">Team responsibilities</a></li>
+                <li><a href="#acceptance">MVP acceptance criteria</a></li>
+                <li><a href="#expansion">Future expansion ideas</a></li>
+            </ol>
+        </nav>
+    </header>
+
+    <main>
+        <section id="positioning" class="content-section">
+            <div class="section-heading">
+                <span class="section-number">01</span>
+                <h2>Product positioning &amp; goals</h2>
+            </div>
+            <div class="section-body">
+                <p><strong>Positioning:</strong> Deliver an English-first Huangli experience: daily DO/DON'T, auspicious hours, and one-line cultural context, supported by subscriptions and lightweight decision tools.</p>
+                <p><strong>Business goals (first 3 months):</strong></p>
+                <ul>
+                    <li>Grow email/Telegram subscriber list to <strong>5,000+</strong>.</li>
+                    <li>Reach <strong>300 monthly sales</strong> for the $19 Digital Pack.</li>
+                    <li>Achieve <strong>3% conversion</strong> from the 7-day free trial to paid.</li>
+                    <li>Maintain <strong>&ge; 50%</strong> organic traffic from SEO and social channels.</li>
+                </ul>
+                <p><strong>Primary audience:</strong> Global users curious about East Asian culture, metaphysics, or productivity rituals. Motivations include actionable daily reminders, culturally grounded insights, and seasonal storytelling.</p>
+            </div>
         </section>
 
-        <div class="bottom-panels">
-            <section id="heat-panel">
-                <h2>热门专业风向标</h2>
-                <div class="filter-container" id="filter-container">
-                    <button class="filter-btn active" data-filter="all">总览</button>
-                    <button class="filter-btn" data-filter="商科">商科</button>
-                    <button class="filter-btn" data-filter="理工">理工</button>
-                    <button class="filter-btn" data-filter="人文社科">人文社科</button>
+        <section id="ia" class="content-section">
+            <div class="section-heading">
+                <span class="section-number">02</span>
+                <h2>Information architecture</h2>
+            </div>
+            <div class="section-body two-column">
+                <div>
+                    <h3>Core pages</h3>
+                    <ul>
+                        <li><strong>Home:</strong> Value proposition, subscription CTA, daily card preview, links to tools &amp; content.</li>
+                        <li><strong>Product:</strong> Digital Pack (PDF + 60-day subscription + ICS), Creator Pack templates, future print-on-demand.</li>
+                        <li><strong>Free Trial:</strong> Capture email for 7-day sample sequence.</li>
+                        <li><strong>Tools:</strong> Zodiac Finder, Lunar Date Converter, Auspicious Hours, Simple Date Picker.</li>
+                        <li><strong>Learn:</strong> Cultural glossary for Day Officer, Zodiac, Solar Terms, FAQ.</li>
+                        <li><strong>About &amp; Contact</strong></li>
+                        <li><strong>Policies:</strong> Privacy, Terms, Refund, Entertainment disclaimer.</li>
+                    </ul>
                 </div>
-                <div id="heat-dashboard" class="heat-dashboard"></div>
-            </section>
-            
-            <section id="cases-panel">
-                <div class="leaderboard-section">
-                    <h2>功德排行榜</h2>
-                    <ol class="leaderboard-list" id="leaderboard-list"></ol>
+                <div>
+                    <h3>Content depth (Learn)</h3>
+                    <ul>
+                        <li>12 Day Officer explainer pages.</li>
+                        <li>12 Zodiac profiles with clash guidance.</li>
+                        <li>24 Solar Term essays (600–900 words + illustration).</li>
+                        <li>Comprehensive FAQ &amp; disclaimer.</li>
+                    </ul>
                 </div>
-                
-                <h2>众生功德簿</h2>
-                <div class="table-container">
-                    <table id="cases-table">
-                        <thead>
-                            <tr>
-                                <th>学校</th>
-                                <th>专业</th>
-                                <th>状态</th>
-                                <th style="text-align: center;">今日福报</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </section>
-        </div>
-    </div>
+            </div>
+        </section>
 
-    <div id="feedback-modal" class="modal-overlay"></div>
-    <audio id="knock-sound" src="9月29日.MP3" preload="auto"></audio>
-    
+        <section id="mvp" class="content-section">
+            <div class="section-heading">
+                <span class="section-number">03</span>
+                <h2>MVP feature set</h2>
+            </div>
+            <div class="section-body">
+                <h3>3.1 Daily Huangli card</h3>
+                <ul>
+                    <li>Fields: <code>date</code>, <code>dayOfficer</code>, <code>do[]</code>, <code>dont[]</code>, <code>clashAnimal</code>, <code>hours[]</code>, <code>why</code>.</li>
+                    <li>Display: DO/DON'T list, auspicious hours, one-line context, CTA to free trial and Digital Pack.</li>
+                    <li>Subscriptions: email, Telegram (SMS later), ICS feed via <code>/api/ics</code>.</li>
+                </ul>
+                <h3>3.2 Chinese Zodiac Finder</h3>
+                <ul>
+                    <li>Input: birth date (optional time &amp; timezone), returns zodiac name, icon, quick traits, clash guidance.</li>
+                    <li>Logic handles lunar new year boundary using local timezone or Beijing-time override.</li>
+                    <li>Mapping: <code>(year − 4) % 12</code> → Rat, Ox, Tiger, Rabbit, Dragon, Snake, Horse, Goat, Monkey, Rooster, Dog, Pig.</li>
+                    <li>Edge-case toggle: “Use Beijing time for boundary birthdays.”</li>
+                </ul>
+                <h3>3.3 Lunar Date Converter</h3>
+                <ul>
+                    <li>Input solar date → return lunar year/month/day, zodiac, solar term (if any), with copy-to-clipboard.</li>
+                    <li>MVP can rely on pre-computed table or trusted library; long-term server-side calculation with caching.</li>
+                </ul>
+                <h3>3.4 Free Trial (7 days)</h3>
+                <ul>
+                    <li>Email capture with consent checkbox.</li>
+                    <li>Automation: welcome email, daily sends for 6 days, day-7 conversion push.</li>
+                </ul>
+                <h3>3.5 Checkout &amp; fulfillment</h3>
+                <ul>
+                    <li>Payments: Stripe first, PayPal optional later.</li>
+                    <li>Delivery: instant PDF download + ICS link, add buyer to 60-day nurture sequence.</li>
+                </ul>
+                <h3>3.6 ICS subscription</h3>
+                <ul>
+                    <li>All-day events with DO/DON'T summary in the title and metadata in description.</li>
+                    <li>Monthly rolling updates, primarily supporting email subscribers.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="components" class="content-section">
+            <div class="section-heading">
+                <span class="section-number">04</span>
+                <h2>Page &amp; module inventory</h2>
+            </div>
+            <div class="section-body">
+                <ul class="grid-list">
+                    <li><strong>Hero:</strong> Headline, subheadline, dual CTA buttons.</li>
+                    <li><strong>DailyCard:</strong> Date, Day Officer, DO/DON'T, hours, why, OG image support.</li>
+                    <li><strong>ZodiacFinder:</strong> Date picker, timezone selector, Beijing-time toggle, result card, CTA.</li>
+                    <li><strong>LunarConverter:</strong> Date input, result card, copy button.</li>
+                    <li><strong>CTA Banner:</strong> Reusable prompts across pages.</li>
+                    <li><strong>GlossaryTile:</strong> Index cards for Day Officer/Zodiac/Solar Terms.</li>
+                    <li><strong>PricingTile:</strong> Digital Pack vs Creator Pack.</li>
+                    <li><strong>PolicyFootnote:</strong> Entertainment disclaimer placement.</li>
+                    <li><strong>EmailCapture:</strong> Footer subscription widget.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="data-model" class="content-section">
+            <div class="section-heading">
+                <span class="section-number">05</span>
+                <h2>Data model</h2>
+            </div>
+            <div class="section-body">
+                <pre><code>{
+  "date": "2026-01-01",
+  "dayOfficer": "Open",
+  "do": ["Start", "Interview", "First date", "Soft launch"],
+  "dont": ["Surgery", "Legal filings", "Break contracts"],
+  "clashAnimal": "Ox — go light on high-stakes choices",
+  "hours": ["09:00–11:00", "13:00–15:00"],
+  "why": "\"Open\" days favor beginnings; keep stakes low if you clash."
+}</code></pre>
+                <p><strong>Zodiac mapping:</strong> <code>(year − 4) % 12</code> → Rat, Ox, Tiger, Rabbit, Dragon, Snake, Horse, Goat, Monkey, Rooster, Dog, Pig.</p>
+                <p><strong>Lunar new year table:</strong> Ship with a 1900–2100 JSON lookup for MVP; later migrate to algorithm/service with caching.</p>
+            </div>
+        </section>
+
+        <section id="api" class="content-section">
+            <div class="section-heading">
+                <span class="section-number">06</span>
+                <h2>Backend API sketch</h2>
+            </div>
+            <div class="section-body">
+                <ul class="code-list">
+                    <li><code>GET /api/daily?date=YYYY-MM-DD</code> → Daily card JSON.</li>
+                    <li><code>GET /api/ics?days=30</code> → ICS feed.</li>
+                    <li><code>POST /api/subscribe { email }</code> → Store signup &amp; trigger 7-day automation.</li>
+                    <li><code>POST /api/checkout</code> → Stripe Checkout Session.</li>
+                    <li><code>POST /api/webhooks/stripe</code> → Fulfillment and nurture sequence enrollment.</li>
+                    <li><code>GET /api/zodiac?date=YYYY-MM-DD&amp;tz=America/Los_Angeles&amp;mode=beijing|local</code></li>
+                    <li><code>GET /api/lunar?date=YYYY-MM-DD&amp;tz=...</code></li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="stack" class="content-section">
+            <div class="section-heading">
+                <span class="section-number">07</span>
+                <h2>Tech stack &amp; infrastructure</h2>
+            </div>
+            <div class="section-body two-column">
+                <div>
+                    <ul>
+                        <li><strong>Frontend/SSR:</strong> Next.js (App Router) + React.</li>
+                        <li><strong>Styling:</strong> Minimal CSS for MVP → Tailwind + design system later.</li>
+                        <li><strong>Data:</strong> JSON files initially, upgrade to Postgres/Supabase or CMS.</li>
+                        <li><strong>Email:</strong> Manual/CSV for MVP → ESP integration (Resend, SES, MailerLite, etc.).</li>
+                    </ul>
+                </div>
+                <div>
+                    <ul>
+                        <li><strong>Payments:</strong> Stripe first, optional PayPal.</li>
+                        <li><strong>Hosting:</strong> Node + PM2 + Nginx or Vercel/Netlify.</li>
+                        <li><strong>Monitoring:</strong> Plausible/GA4, server logs via PM2.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="copy" class="content-section">
+            <div class="section-heading">
+                <span class="section-number">08</span>
+                <h2>Content &amp; tone guidelines</h2>
+            </div>
+            <div class="section-body">
+                <ul>
+                    <li><strong>DO/DON'T:</strong> Start with verbs, maximum six words, avoid strong medical/financial promises.</li>
+                    <li><strong>Why copy:</strong> 25 words or fewer, emphasize cultural rationale.</li>
+                    <li><strong>Voice:</strong> Gentle, actionable, culture-forward.</li>
+                    <li><strong>Universal disclaimer:</strong> <em>For cultural &amp; entertainment purposes only. Not medical, financial or legal advice.</em></li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="growth" class="content-section">
+            <div class="section-heading">
+                <span class="section-number">09</span>
+                <h2>SEO &amp; growth strategy</h2>
+            </div>
+            <div class="section-body">
+                <ul>
+                    <li>Implement structured data: FAQPage for FAQ content, Article schema for glossary entries.</li>
+                    <li>Target long-tail keywords: solar terms, Day Officers, Zodiac guides, tool pages.</li>
+                    <li>Create shareable OG images for daily cards and tool outputs.</li>
+                    <li>Funnel: tools → free trial email capture → daily drip → purchase.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="compliance" class="content-section">
+            <div class="section-heading">
+                <span class="section-number">10</span>
+                <h2>Compliance &amp; risk</h2>
+            </div>
+            <div class="section-body">
+                <ul>
+                    <li>No medical, investment, or legal guarantees; avoid “guaranteed” language.</li>
+                    <li>Email compliance: include unsubscribe links, transparent privacy policy.</li>
+                    <li>WhatsApp/SMS only with explicit opt-in and clear STOP instructions.</li>
+                    <li>Be mindful of regional restrictions for fortune-telling content; rely on organic distribution.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="roadmap" class="content-section">
+            <div class="section-heading">
+                <span class="section-number">11</span>
+                <h2>Phased roadmap</h2>
+            </div>
+            <div class="section-body">
+                <ol>
+                    <li id="phase-0"><strong>Phase 0 (Week 1–2):</strong> Launch MVP – Home/Product/Trial pages, DailyCard, <code>/api/ics</code>, <code>/api/subscribe</code>, Zodiac Finder, Lunar Converter.</li>
+                    <li><strong>Phase 1 (Week 2–6):</strong> Expand content library (30+ pieces), ship Simple Date Picker, release Creator Pack.</li>
+                    <li><strong>Phase 2 (Month 2–3):</strong> Launch POD products, member area with history, favorites, ad-free experience.</li>
+                </ol>
+            </div>
+        </section>
+
+        <section id="wireframes" class="content-section">
+            <div class="section-heading">
+                <span class="section-number">12</span>
+                <h2>Key page wireframes (copy draft)</h2>
+            </div>
+            <div class="section-body">
+                <h3>Home hero</h3>
+                <ul>
+                    <li>Headline: “A modern English Huangli”.</li>
+                    <li>Subheadline: “Daily DO/DON'T, auspicious hours, and a one-sentence story at 7am.”</li>
+                    <li>Buttons: “Get Digital Pack ($19)” and “Try 7 days free”.</li>
+                    <li>Footnote disclaimer in hero.</li>
+                </ul>
+                <h3>Zodiac Finder</h3>
+                <ul>
+                    <li>Date picker + timezone display + “Calculate with Beijing time” toggle.</li>
+                    <li>Result card: zodiac name, icon, 3 tips, CTA to free trial.</li>
+                    <li>Boundary copy advising Beijing vs local time.</li>
+                </ul>
+                <h3>Lunar Converter</h3>
+                <ul>
+                    <li>Date input &amp; convert button.</li>
+                    <li>Result: lunar year/month/day, zodiac, solar term (if any), copy-to-clipboard.</li>
+                </ul>
+                <h3>Product page</h3>
+                <ul>
+                    <li>Value stack: PDF preview (30 days), 60-day pushes, ICS access.</li>
+                    <li>FAQ covering deliverability, refunds, cancellation, ICS usage.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="roles" class="content-section">
+            <div class="section-heading">
+                <span class="section-number">13</span>
+                <h2>Team responsibilities</h2>
+            </div>
+            <div class="section-body two-column">
+                <div>
+                    <h3>Frontend</h3>
+                    <ul>
+                        <li>Build pages &amp; shared components.</li>
+                        <li>Client-side validation for forms.</li>
+                        <li>Generate OG imagery for daily cards.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Backend &amp; ops</h3>
+                    <ul>
+                        <li>Implement <code>/api/ics</code>, <code>/api/subscribe</code>, <code>/api/zodiac</code>, <code>/api/lunar</code>, Stripe flows.</li>
+                        <li>Handle webhook fulfillment &amp; automation enrollment.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Content</h3>
+                    <ul>
+                        <li>Produce 30-day daily cards.</li>
+                        <li>Write Day Officer, Zodiac, Solar Term articles.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Design</h3>
+                    <ul>
+                        <li>Create logo, palette, card templates (9:16 &amp; 1:1).</li>
+                        <li>Illustrate 12 zodiacs &amp; 12 Day Officers.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="acceptance" class="content-section">
+            <div class="section-heading">
+                <span class="section-number">14</span>
+                <h2>MVP acceptance criteria</h2>
+            </div>
+            <div class="section-body">
+                <ul>
+                    <li>Zodiac Finder &amp; Lunar Converter deliver accurate results, including lunar new year boundaries.</li>
+                    <li>7-day trial emails achieve ≥95% deliverability with functional unsubscribe.</li>
+                    <li>Post-purchase flow: payment success → PDF access, ICS link, enrollment in 60-day series.</li>
+                    <li>Performance: mobile LCP &lt; 2.5s, CLS &lt; 0.1.</li>
+                    <li>Disclaimer present site-wide; FAQ covers key usage scenarios.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="expansion" class="content-section">
+            <div class="section-heading">
+                <span class="section-number">15</span>
+                <h2>Future expansion ideas</h2>
+            </div>
+            <div class="section-body">
+                <ul class="grid-list">
+                    <li>Compatibility matcher (zodiac/five-element, entertainment framing).</li>
+                    <li>Personal ritual checklist templates.</li>
+                    <li>Member features: history lookup, favorites, ad-free mode.</li>
+                    <li>Localization: English → German/French/Japanese.</li>
+                    <li>Social automation: daily card image generation &amp; auto-posting.</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; <span id="year"></span> English Huangli Project Draft. Crafted for internal planning.</p>
+    </footer>
+
     <script src="script.js"></script>
 </body>
 </html>
